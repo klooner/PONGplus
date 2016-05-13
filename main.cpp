@@ -24,43 +24,38 @@ int main()
 
     while(window.isOpen()){
 
+        // events
         sf::Event event;
 
+        while(window.pollEvent(event)){
+            if(event.type == sf::Event::Closed)window.close();
+            p1.handleInput(event);
+            p2.handleInput(event);
+        }
+
+        //update
         sf::Time delta = ticks.restart();
 
-       timeSinceLastUpdate += delta;
+        timeSinceLastUpdate += delta;
 
         while(timeSinceLastUpdate > TimePerFrame){
 
             timeSinceLastUpdate -= TimePerFrame;
-
-            while(window.pollEvent(event)){
-
-
-                if(event.type == sf::Event::Closed)window.close();
-
-                p1.handleInput(event);
-                p2.handleInput(event);
-
-                p1.update(TimePerFrame);
-                p2.update(TimePerFrame);
-                ball.update(TimePerFrame, p1, p2);
-
-            }
-
-            window.clear(sf::Color(239,176,107));
-
-            p1.render(window);
-            p2.render(window);
-            ball.render(window);
-
-            window.display();
-
+            p1.update(TimePerFrame);
+            p2.update(TimePerFrame);
+            ball.update(TimePerFrame, p1, p2);
         }
+        
+        // render
+        window.clear(sf::Color(239,176,107));
+        p1.render(window);
+        p2.render(window);
+        ball.render(window);
+
+        window.display();
     }
 
 
 
     return 0;
 }
-
